@@ -1,14 +1,17 @@
 # Agrivision - Git Ignore File
 
 # Model files (add manually, do not commit to git)
-models/
-*.pt
-*.pth
-*.onnx
-*.pkl
+models/*.pt
+models/*.pth
+models/*.onnx
+models/*.pkl
+!models/.gitkeep
 
 # Data directories
-data/
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
 datasets/
 uploads/
 
@@ -26,7 +29,6 @@ env/
 
 # IDE settings
 .idea/
-.vscode/
 *.swp
 *.swo
 *~
@@ -49,6 +51,7 @@ htmlcov/
 # Logs
 *.log
 logs/
+runs/
 
 # OS files
 .DS_Store

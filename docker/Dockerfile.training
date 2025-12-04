@@ -1,5 +1,5 @@
-# Agrivision Development Dockerfile
-# Python 3.11 slim base image for development
+# Agrivision Training Dockerfile
+# For VS Code Dev Container - Model Training & Experimentation
 
 FROM python:3.11-slim
 
@@ -20,22 +20,31 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxext6 \
     libxrender-dev \
     libgl1 \
+    git \
+    curl \
+    wget \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements file
+# Copy requirements files
 COPY requirements.txt .
+COPY requirements-training.txt .
 
 # Install Python dependencies
 RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
+    pip install -r requirements-training.txt
 
 # Create non-root user for security
 RUN groupadd -r agrivision && \
-    useradd -r -g agrivision -d /app -s /sbin/nologin agrivision && \
+    useradd -r -g agrivision -d /home/agrivision -m -s /bin/bash agrivision && \
+    chown -R agrivision:agrivision /app
+
+# Create directories
+RUN mkdir -p /app/notebooks /app/data /app/models && \
     chown -R agrivision:agrivision /app
 
 # Switch to non-root user
 USER agrivision
 
-# Default command for development
-CMD ["bash"]
+# Keep container running for Dev Container
+CMD ["sleep", "infinity"]

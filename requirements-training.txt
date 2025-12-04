@@ -1,0 +1,24 @@
+# Agrivision - Training & Experimentation Dependencies
+# Extends requirements.txt for model development
+
+# Include base API requirements
+-r requirements.txt
+
+# Jupyter/IPython Kernel (for VS Code notebooks)
+ipykernel==6.27.1
+ipywidgets==8.1.1
+
+# Visualization
+matplotlib==3.8.2
+seaborn==0.13.0
+
+# Data Handling
+pandas==2.1.3
+scikit-learn==1.3.2
+
+# Training Utilities
+tqdm==4.66.1
+tensorboard==2.15.1
+
+# Image Processing (headless for Docker)
+opencv-python-headless==4.8.1.78
