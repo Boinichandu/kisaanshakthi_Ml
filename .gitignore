@@ -1,0 +1,63 @@
+# Agrivision - Git Ignore File
+
+# Model files (add manually, do not commit to git)
+models/
+*.pt
+*.pth
+*.onnx
+*.pkl
+
+# Data directories
+data/
+datasets/
+uploads/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env
+
+# IDE settings
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker volumes
+docker/data/
+
+# Temporary files
+tmp/
+temp/
+*.tmp

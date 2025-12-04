@@ -1,0 +1,43 @@
+# Agrivision Docker Compose Configuration
+# Development environment with hot reload
+
+services:
+  agrivision-api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dev
+    container_name: agrivision-dev
+    
+    # Mount the project folder for development
+    volumes:
+      - ..:/app
+      - /app/__pycache__
+    
+    # Expose port 8000
+    ports:
+      - "8000:8000"
+    
+    # Environment variables
+    environment:
+      - PYTHONPATH=/app
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+    
+    # Run uvicorn with hot reload for development
+    command: python -m uvicorn src.api.app:app --host 0.0.0.0 --port 8000 --reload
+    
+    # Restart policy
+    restart: unless-stopped
+    
+    # Resource limits (optional, adjust as needed)
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 1G
+
+# Network configuration
+networks:
+  default:
+    name: agrivision-network
