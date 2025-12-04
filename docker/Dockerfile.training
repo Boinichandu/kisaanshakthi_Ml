@@ -34,9 +34,11 @@ COPY requirements-training.txt .
 RUN pip install --upgrade pip && \
     pip install -r requirements-training.txt
 
-# Create non-root user for security
-RUN groupadd -r agrivision && \
-    useradd -r -g agrivision -d /home/agrivision -m -s /bin/bash agrivision && \
+# Create non-root user with same UID/GID as host user for volume permissions
+ARG UID=1000
+ARG GID=1000
+RUN groupadd -g ${GID} agrivision && \
+    useradd -u ${UID} -g agrivision -d /home/agrivision -m -s /bin/bash agrivision && \
     chown -R agrivision:agrivision /app
 
 # Create directories
