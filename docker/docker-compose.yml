@@ -8,28 +8,28 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.dev
     container_name: agrivision-dev
-    
+
     # Mount the project folder for development
     volumes:
       - ..:/app
       - /app/__pycache__
-    
+
     # Expose port 8000
     ports:
       - "8000:8000"
-    
+
     # Environment variables
     environment:
       - PYTHONPATH=/app
       - PYTHONDONTWRITEBYTECODE=1
       - PYTHONUNBUFFERED=1
-    
+
     # Run uvicorn with hot reload for development
     command: python -m uvicorn src.api.app:app --host 0.0.0.0 --port 8000 --reload
-    
+
     # Restart policy
     restart: unless-stopped
-    
+
     # Resource limits
     deploy:
       resources:
@@ -44,28 +44,28 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.training
     container_name: agrivision-training
-    
+
     # Mount project folder for development
     volumes:
       - ..:/app
       - /app/__pycache__
-    
+
     # Expose TensorBoard port
     ports:
       - "6006:6006"
-    
+
     # Environment variables
     environment:
       - PYTHONPATH=/app
       - PYTHONDONTWRITEBYTECODE=1
       - PYTHONUNBUFFERED=1
-    
+
     # Keep running for VS Code to attach
     command: sleep infinity
-    
+
     # Restart policy
     restart: unless-stopped
-    
+
     # Resource limits (higher for training)
     deploy:
       resources:
@@ -73,6 +73,10 @@ services:
           memory: 8G
         reservations:
           memory: 2G
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [ gpu ]
 
 # Network configuration
 networks:

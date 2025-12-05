@@ -1,9 +1,10 @@
 {
     "name": "Agrivision Training",
-    "dockerComposeFile": ["../docker/docker-compose.yml"],
+    "dockerComposeFile": [
+        "../docker/docker-compose.yml"
+    ],
     "service": "agrivision-training",
     "workspaceFolder": "/app",
-    
     "customizations": {
         "vscode": {
             "extensions": [
@@ -18,7 +19,10 @@
             "settings": {
                 "python.defaultInterpreterPath": "/usr/local/bin/python",
                 "python.analysis.typeCheckingMode": "basic",
-                "jupyter.widgetScriptSources": ["jsdelivr.com", "unpkg.com"],
+                "jupyter.widgetScriptSources": [
+                    "jsdelivr.com",
+                    "unpkg.com"
+                ],
                 "editor.formatOnSave": true,
                 "python.formatting.provider": "none",
                 "[python]": {
@@ -27,8 +31,13 @@
             }
         }
     },
-    
-    "forwardPorts": [8000, 6006],
-    
+    "forwardPorts": [
+        8000,
+        6006
+    ],
+    "runArgs": [
+        "--gpus",
+        "all"
+    ],
     "postCreateCommand": "pip install ipykernel && python -m ipykernel install --user --name agrivision --display-name 'Agrivision (Python 3.11)'"
 }
