@@ -12,7 +12,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 # Path to the model file
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "models", "mobilenetv2_agrivision.pt")
+MODEL_PATH = os.path.join(
+    os.path.dirname(__file__), "..", "..", "models", "mobilenetv2_agrivision.pt"
+)
 
 # 38 Plant Disease Classes (PlantVillage Dataset)
 CLASS_NAMES = [
@@ -53,14 +55,14 @@ CLASS_NAMES = [
     "Tomato___Target_Spot",
     "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
     "Tomato___Tomato_mosaic_virus",
-    "Tomato___healthy"
+    "Tomato___healthy",
 ]
 
 
 def get_class_names() -> list:
     """
     Get the list of 38 plant disease class names
-    
+
     Returns:
         List of class name strings
     """
@@ -70,70 +72,69 @@ def get_class_names() -> list:
 def create_model(num_classes: int = 38) -> nn.Module:
     """
     Create a MobileNetV2 model architecture for plant disease classification
-    
+
     Args:
         num_classes: Number of output classes (default: 38)
-    
+
     Returns:
         MobileNetV2 model with modified classifier
     """
     model = models.mobilenet_v2(weights=None)
-    
+
     # Modify the classifier for our number of classes
     num_features = model.classifier[1].in_features
     model.classifier = nn.Sequential(
-        nn.Dropout(p=0.2),
-        nn.Linear(num_features, num_classes)
+        nn.Dropout(p=0.2), nn.Linear(num_features, num_classes)
     )
-    
+
     return model
 
 
-def load_model(model_path: str = None) -> nn.Module:
+def load_model(model_path: str | None = None) -> nn.Module:
     """
     Load the trained MobileNetV2 model for plant disease classification
-    
+
     Args:
         model_path: Optional custom path to model file
-    
+
     Returns:
         Loaded PyTorch model in eval mode (CPU only)
-    
+
     Raises:
         FileNotFoundError: If model file does not exist
         RuntimeError: If model loading fails
     """
     if model_path is None:
         model_path = MODEL_PATH
-    
+
     # Resolve the path
     model_path = os.path.abspath(model_path)
-    
+
     if not os.path.exists(model_path):
         logger.warning(f"Model file not found at {model_path}")
         raise FileNotFoundError(f"Model file not found at {model_path}")
-    
+
     try:
         # Create model architecture
         model = create_model(num_classes=len(CLASS_NAMES))
-        
+
         # Load weights (CPU only)
-        state_dict = torch.load(model_path, map_location=torch.device('cpu'))
-        
+        state_dict = torch.load(model_path, map_location=torch.device("cpu"))
+
         # Handle different state dict formats
-        if 'model_state_dict' in state_dict:
-            model.load_state_dict(state_dict['model_state_dict'])
-        elif 'state_dict' in state_dict:
-            model.load_state_dict(state_dict['state_dict'])
+        if "model_state_dict" in state_dict:
+            model.load_state_dict(state_dict["model_state_dict"])
+        elif "state_dict" in state_dict:
+            model.load_state_dict(state_dict["state_dict"])
         else:
             model.load_state_dict(state_dict)
-        
+
         # Set to evaluation mode
         model.eval()
-        
+
         logger.info(f"Model loaded successfully from {model_path}")
         return model
-        
+
     except Exception as e:
         logger.error(f"Failed to load model: {e}")
         raise RuntimeError(f"Failed to load model: {e}")
