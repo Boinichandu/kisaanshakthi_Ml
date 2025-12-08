@@ -1,12 +1,5 @@
 # Agrivision - Git Ignore File
 
-# Model files (add manually, do not commit to git)
-models/*.pt
-models/*.pth
-models/*.onnx
-models/*.pkl
-!models/.gitkeep
-
 # Data directories
 data/raw/*
 data/processed/*
