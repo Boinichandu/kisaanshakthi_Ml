@@ -73,6 +73,11 @@ def create_model(num_classes: int = 38) -> nn.Module:
     """
     Create a MobileNetV2 model architecture for plant disease classification
 
+    The model uses transfer learning with the following custom top layers:
+    - Global Average Pooling layer to reduce dimensionality
+    - Dense layer (128 neurons, ReLU activation) for feature extraction
+    - Softmax Output layer (38 neurons) for disease classification
+
     Args:
         num_classes: Number of output classes (default: 38)
 
@@ -81,10 +86,16 @@ def create_model(num_classes: int = 38) -> nn.Module:
     """
     model = models.mobilenet_v2(weights=None)
 
-    # Modify the classifier for our number of classes
-    num_features = model.classifier[1].in_features
+    # Replace the classifier with custom dense layers
+    # MobileNetV2 already has AdaptiveAvgPool2d before classifier (acts as Global Average Pooling)
+    # Input features from the convolutional base: 1280
     model.classifier = nn.Sequential(
-        nn.Dropout(p=0.2), nn.Linear(num_features, num_classes)
+        nn.Dropout(p=0.2),
+        nn.Linear(1280, 128),  # Dense layer with 128 neurons
+        nn.ReLU(),  # ReLU activation
+        nn.Linear(
+            128, num_classes
+        ),  # Output layer (Softmax applied during loss computation)
     )
 
     return model

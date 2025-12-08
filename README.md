@@ -23,6 +23,33 @@ Key features:
 - Input validation and security checks
 - Docker support for development and production
 
+## Model Architecture
+
+The model is based on MobileNetV2 pre-trained on ImageNet, using transfer learning to adapt to plant disease classification. The pre-trained convolutional base is fine-tuned on the PlantVillage dataset.
+
+### Custom Top Layers
+
+The original MobileNetV2 classifier is replaced with custom dense layers:
+
+| Layer | Description |
+|-------|-------------|
+| Global Average Pooling | Reduces spatial dimensions from the convolutional base |
+| Dropout (0.2) | Regularization to prevent overfitting |
+| Dense (128 neurons) | Feature extraction with ReLU activation |
+| Output (38 neurons) | Softmax layer for disease classification |
+
+### Training Configuration
+
+| Parameter | Value |
+|-----------|-------|
+| Optimizer | Adam |
+| Loss Function | Categorical Cross-Entropy |
+| Learning Rate | 0.001 |
+| Input Size | 224 x 224 pixels |
+| Batch Size | 32 |
+
+This configuration enables effective learning while minimizing training time and computational cost.
+
 ## Supported Classes
 
 The model can identify diseases in the following crops:
