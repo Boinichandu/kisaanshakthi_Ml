@@ -57,3 +57,6 @@ docker/data/
 tmp/
 temp/
 *.tmp
+
+# Windows shortcut
+home.lnk
